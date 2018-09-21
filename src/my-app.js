@@ -7,6 +7,39 @@ import { persistentReducer } from 'redux-pouchdb';
 
 
 
+const db = new PouchDB(`redux${user}`);     
+
+var couchDB = new PouchDB(`https://plex:1111111111@www.sitemakr.se/couchdb/redux${user}`);
+
+//couchDB.info().then(info => console.log(info));
+
+
+
+db
+.replicate
+.from(couchDB)
+.on('complete', (info) => {
+    // console.log('info');
+    // console.log(info);    
+    db.sync(couchDB, { live: true, retry: true })
+    let myApp = document.createElement('my-app');
+    document.body.appendChild(myApp);
+})
+.on('error', (info) => {
+    console.log('error');
+    console.log(info);
+})
+.on('change', (info) => {
+    console.log('change');
+    console.log(info);
+});
+
+
+
+
+
+
+
 
 
 function counter(state, action) {
