@@ -11740,43 +11740,21 @@ var MyModule = (function (exports) {
     };
   };
 
-  const db = new PouchDB(`redux${user}`);
-
-
-
-          
+  const db = new PouchDB(`redux${user}`);     
 
   var couchDB = new PouchDB(`https://plex:1111111111@www.sitemakr.se/couchdb/redux${user}`);
-  //var couchDB = new PouchDB(`http://plex:1111111111@10.0.1.7:5984/redux${user}`);
 
-  // var couchDB = new PouchDB(`https://www.sitemakr.se/couchdb/reduxone`);
-
-  // var couchDB = new PouchDB(`https://www.sitemakr.se/couchdb/reduxone`);
-
-
-  //var couchDB = new PouchDB(`https://www.sitemakr.se/couchdb/reduxone`);
-  couchDB.info().then(info => console.log(info));
-  console.log('document3');
-  console.log(document);
-
-  // couchDB.info().then(info => console.log(info));
-
-
-
+  //couchDB.info().then(info => console.log(info));
 
 
 
   db
   .replicate
   .from(couchDB)
-  .on('complete', (info) => {
-      console.log('info');
-      console.log(info);
-      // loadjs('./bundle.js')
-      
+  .on('complete', (info) => {   
       db.sync(couchDB, { live: true, retry: true });
-      let myApp = document.createElement('my-app');
-      document.body.appendChild(myApp);
+      console.log('info');
+      console.log(info); 
   })
   .on('error', (info) => {
       console.log('error');

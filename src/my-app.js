@@ -18,12 +18,10 @@ var couchDB = new PouchDB(`https://plex:1111111111@www.sitemakr.se/couchdb/redux
 db
 .replicate
 .from(couchDB)
-.on('complete', (info) => {
-    // console.log('info');
-    // console.log(info);    
+.on('complete', (info) => {   
     db.sync(couchDB, { live: true, retry: true })
-    let myApp = document.createElement('my-app');
-    document.body.appendChild(myApp);
+    console.log('info');
+    console.log(info); 
 })
 .on('error', (info) => {
     console.log('error');

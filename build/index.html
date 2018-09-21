@@ -18,6 +18,8 @@
     <script src="https://unpkg.com/redux-logger@3.0.6/dist/redux-logger.js"></script>
     <script src="//cdn.jsdelivr.net/npm/pouchdb@7.0.0/dist/pouchdb.min.js"></script>
     <script src="./pouchdb.authentication.js"></script>
+    <script src="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.css" />
 
   </head>
   <body>
@@ -27,18 +29,93 @@
       <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
       <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
     </div>
+    <div class="container">
+      
+        <input id="txtEmail" type="email" placeholder="Email">
+        <input id="txtPassword" type="password" placeholder="Password">
+        <button id="btnLogin" class="btn btn-action">
+          Log in
+        </button>
+        <button id="btnLogout" class="btn btn-action hide">
+          Log out
+        </button>
+    </div>
+
     <script>
       var user;
+      var script;
     </script>
 
     <script type="module">
       document.addEventListener('DOMContentLoaded', function() {
 
         user = "nine"
+
+        
+
+        const txtEmail = document.querySelector('#txtEmail');
+        const txtPassword = document.querySelector('#txtPassword');
+        const btnLogin = document.querySelector('#btnLogin');
+        const btnLogout = document.querySelector('#btnLogout');
+
+        btnLogin.addEventListener('click', e => {
+          const email = txtEmail.value;
+          const pass = txtPassword.value;
+          const auth = firebase.auth();
+
+          console.log('auth');
+          console.log(auth);
+
+          const promise = auth.signInWithEmailAndPassword(email, pass);
+          
+          promise.catch(e => console.log(e.message));
+        })
+
+
+
+        btnLogout.addEventListener('click', e => {
+          firebase.auth().signOut();
+        })
+        
+
+        firebase.auth().onAuthStateChanged(firebaseuser => { 
+          if(firebaseuser) {
+            console.log(firebaseuser);
+            txtEmail.value = "";
+            txtPassword.value = "";
+            if(!script) {
+              loadjs('./bundle.js')
+            }
+            
+            let myAppEl = document.querySelector('my-app');
+            console.log(myAppEl)
+            if(!myAppEl) {
+              myAppEl = document.createElement('my-app');
+              document.body.appendChild(myAppEl);
+            }
+            
+          } else {
+            console.log('not logged in');
+            console.log('script');
+            console.log(script);
+            if(script) {
+              document.body.removeChild(script);
+              script = undefined;
+            }
+
+            let myAppEl = document.querySelector('my-app');
+            console.log(myAppEl)
+            if(myAppEl) {
+              document.body.removeChild(myAppEl);
+            }
+            
+          }
+        }); 
+
         // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
         // // The Firebase SDK is initialized and available here!
         //
-        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.auth().onAuthStateChanged(user => { console.log(user) });
         // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
         // firebase.messaging().requestPermission().then(() => { });
         // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
@@ -46,7 +123,7 @@
         // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
         function loadjs(file) {
-            var script = document.createElement("script");
+            script = document.createElement("script");
             script.type = "text/javascript";
             script.src = file;
             script.onload = function(){
@@ -55,17 +132,17 @@
             document.body.appendChild(script);
         }
 
-        loadjs('./bundle.js')
+        
 
 
-        try {
-          let app = firebase.app();
-          let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
-          document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
-        }
+        // try {
+        //   let app = firebase.app();
+        //   let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
+        //   document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
+        // } catch (e) {
+        //   console.error(e);
+        //   document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
+        // }
       });
     </script>
   </body>
