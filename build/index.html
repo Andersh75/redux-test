@@ -49,7 +49,7 @@
     <script type="module">
       document.addEventListener('DOMContentLoaded', function() {
 
-        user = "nine"
+        
 
         
 
@@ -84,6 +84,8 @@
             txtEmail.value = "";
             txtPassword.value = "";
             if(!script) {
+              //user = "nine"
+              user = firebaseuser.email
               loadjs('./bundle.js')
             }
             
@@ -111,16 +113,6 @@
             
           }
         }); 
-
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { console.log(user) });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
 
         function loadjs(file) {
             script = document.createElement("script");
